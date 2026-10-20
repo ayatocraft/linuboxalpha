@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LinuBox</title>
+
+<style>
+:root {
+    color-scheme: dark;
+    font-family: "Segoe UI", sans-serif;
+    background: #101318;
+    color: #f4f6fa;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+header {
+    height: 58px;
+    display: flex;
+    align-items: center;
+    padding: 0 22px;
+    border-bottom: 1px solid #30343d;
+    background: #191d24;
+}
+
+.logo {
+    font-size: 21px;
+    font-weight: 650;
+    letter-spacing: .3px;
+}
+
+.logo span {
+    color: #70a7ff;
+}
+
+main {
+    width: min(1100px, 100%);
+    margin: 0 auto;
+    padding: 28px 20px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.panel {
+    background: #191d24;
+    border: 1px solid #30343d;
+    border-radius: 12px;
+    padding: 20px;
+}
+
+h1 {
+    font-size: 25px;
+    margin: 0 0 8px;
+}
+
+.description {
+    color: #b4bdcb;
+    line-height: 1.7;
+    margin: 0;
+}
+
+.file-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+    margin-top: 18px;
+}
+
+button,
+.file-button {
+    min-height: 42px;
+    border-radius: 7px;
+    padding: 0 17px;
+    border: 1px solid #48515f;
+    background: #292f39;
+    color: white;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+button.primary {
+    background: #1769d2;
+    border-color: #1769d2;
+}
+
+button:hover,
+.file-button:hover {
+    filter: brightness(1.13);
+}
+
+button:disabled {
+    opacity: .45;
+    cursor: not-allowed;
+}
+
+input[type="file"] {
+    display: none;
+}
+
+#fileName {
+    color: #c5cedb;
+    font-size: 13px;
+    overflow-wrap: anywhere;
+}
+
+#status {
+    color: #b4bdcb;
+    font-size: 13px;
+    margin-top: 16px;
+    line-height: 1.7;
+    white-space: pre-wrap;
+}
+
+#screenFrame {
+    background: #000;
+    border: 1px solid #343943;
+    border-radius: 9px;
+    overflow: auto;
+    min-height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#screen {
+    width: 100%;
+    min-height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#screen canvas {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    image-rendering: pixelated;
+}
+
+.placeholder {
+    color: #808b9b;
+    text-align: center;
+    padding: 32px 15px;
+    line-height: 1.8;
+}
+
+footer {
+    text-align: center;
+    color: #788393;
+    padding: 18px;
+    font-size: 12px;
+}
+
+@media (max-width: 600px) {
+    main {
+        padding: 16px 12px;
+    }
+
+    .panel {
+        padding: 15px;
+    }
+
+    .file-row button,
+    .file-button {
+        width: 100%;
+    }
+}
+</style>
+
+</head>
+
+<body>
+<header>
+    <div class="logo">Linu<span>Box</span></div>
+</header>
+
+<main>
+    <section class="panel">
+        <h1>仮想PCを起動</h1>
+        <p class="description">
+            OSのISOファイルを選択して起動します。
+            起動したOSの操作は、通常のPCと同じように行います。
+        </p>
+
+```
+    <div class="file-row">
+        <label class="file-button" for="isoFile">
+            ISOファイルを選択
+        </label>
+
+        <input
+            type="file"
+            id="isoFile"
+            accept=".iso,application/octet-stream"
+        >
+
+        <span id="fileName">ISOが選択されていません</span>
+    </div>
+
+    <div class="file-row">
+        <button class="primary" id="startButton" disabled>
+            起動
+        </button>
+
+        <button id="stopButton" disabled>
+            停止
+        </button>
+    </div>
+
+    <div id="status" role="status" aria-live="polite">
+        ISOファイルを選択してください。
+    </div>
+</section>
+
+<section class="panel">
+    <h1>仮想PC</h1>
+
+    <div id="screenFrame">
+        <div id="screen">
+            <div class="placeholder">
+                OSの画面はここに表示されます。
+            </div>
+        </div>
+    </div>
+</section>
+```
+
+</main>
+
+<footer>
+    LinuBox Alpha 0.1
+</footer>
+
+<!-- v86本体 -->
+
+<script src="./lib/libv86.js"></script>
+
+<script>
+"use strict";
+
+const isoInput = document.getElementById("isoFile");
+const fileName = document.getElementById("fileName");
+const startButton = document.getElementById("startButton");
+const stopButton = document.getElementById("stopButton");
+const statusElement = document.getElementById("status");
+const screenElement = document.getElementById("screen");
+
+let selectedISO = null;
+let emulator = null;
+let starting = false;
+
+function setStatus(message) {
+    statusElement.textContent = message;
+}
+
+function setStarting(value) {
+    starting = value;
+    startButton.disabled = !selectedISO || value || !!emulator;
+    isoInput.disabled = value || !!emulator;
+}
+
+function showPlaceholder(message) {
+    screenElement.replaceChildren();
+
+    const placeholder = document.createElement("div");
+    placeholder.className = "placeholder";
+    placeholder.textContent = message;
+
+    screenElement.appendChild(placeholder);
+}
+
+isoInput.addEventListener("change", () => {
+    const file = isoInput.files?.[0];
+
+    if (!file) {
+        selectedISO = null;
+        fileName.textContent = "ISOが選択されていません";
+        startButton.disabled = true;
+        return;
+    }
+
+    if (!file.name.toLowerCase().endsWith(".iso")) {
+        selectedISO = null;
+        fileName.textContent = "ISOファイルを選択してください";
+        startButton.disabled = true;
+        setStatus("ISO形式のファイルを選択してください。");
+        return;
+    }
+
+    selectedISO = file;
+    fileName.textContent =
+        `${file.name}（${(file.size / 1024 / 1024).toFixed(1)} MB）`;
+
+    startButton.disabled = !!emulator || starting;
+    setStatus("ISOを選択しました。起動できます。");
+});
+
+startButton.addEventListener("click", async () => {
+    if (!selectedISO || starting || emulator) return;
+
+    if (typeof window.V86Starter !== "function") {
+        setStatus(
+            "v86を読み込めません。\n" +
+            "./lib/libv86.js の配置を確認してください。"
+        );
+        return;
+    }
+
+    setStarting(true);
+    stopButton.disabled = true;
+    setStatus("ISOを読み込んでいます……");
+
+    try {
+        const isoBuffer = await selectedISO.arrayBuffer();
+
+        if (isoBuffer.byteLength === 0) {
+            throw new Error("ISOファイルが空です。");
+        }
+
+        setStatus("仮想PCを準備しています……");
+        screenElement.replaceChildren();
+
+        emulator = new V86Starter({
+            wasm_path: "./build/v86.wasm",
+
+            memory_size: 512 * 1024 * 1024,
+            vga_memory_size: 8 * 1024 * 1024,
+
+            screen_container: screenElement,
+
+            bios: {
+                url: "./bios/seabios.bin"
+            },
+
+            vga_bios: {
+                url: "./bios/vgabios.bin"
+            },
+
+            cdrom: {
+                buffer: isoBuffer
+            },
+
+            autostart: true
+        });
+
+        emulator.add_listener("emulator-ready", () => {
+            setStatus(
+                "仮想PCを起動しました。\n" +
+                "OSの起動処理が終わるまでお待ちください。"
+            );
+
+            stopButton.disabled = false;
+            setStarting(false);
+        });
+
+        emulator.add_listener("emulator-started", () => {
+            setStatus("仮想PCが起動しています。");
+        });
+
+        emulator.add_listener("emulator-stopped", () => {
+            setStatus("仮想PCが停止しました。");
+        });
+
+        emulator.add_listener("download-progress", (data) => {
+            if (data && Number.isFinite(data.loaded) &&
+                Number.isFinite(data.total) && data.total > 0) {
+                const percent = Math.round(
+                    data.loaded / data.total * 100
+                );
+
+                setStatus(`仮想PCの準備中…… ${percent}%`);
+            }
+        });
+
+        stopButton.disabled = false;
+
+    } catch (error) {
+        console.error("[LinuBox]", error);
+
+        if (emulator) {
+            try {
+                emulator.stop();
+            } catch (_) {}
+        }
+
+        emulator = null;
+        stopButton.disabled = true;
+        setStarting(false);
+
+        setStatus(
+            "起動に失敗しました。\n" +
+            (error?.message || String(error)) +
+            "\n必要なv86ファイルと配置を確認してください。"
+        );
+    }
+});
+
+stopButton.addEventListener("click", () => {
+    if (!emulator) return;
+
+    try {
+        emulator.stop();
+    } catch (error) {
+        console.error("[LinuBox] 停止エラー", error);
+    }
+
+    emulator = null;
+    stopButton.disabled = true;
+    isoInput.disabled = false;
+    startButton.disabled = !selectedISO;
+    showPlaceholder("仮想PCは停止しています。");
+    setStatus("仮想PCを停止しました。");
+});
+</script>
+
+</body>
+</html>
