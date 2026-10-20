@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
@@ -27,6 +26,7 @@ body {
 
 header {
     height: 58px;
+    flex-shrink: 0;
     display: flex;
     align-items: center;
     padding: 0 22px;
@@ -66,6 +66,11 @@ h1 {
     margin: 0 0 8px;
 }
 
+h2 {
+    font-size: 17px;
+    margin: 22px 0 10px;
+}
+
 .description {
     color: #b4bdcb;
     line-height: 1.7;
@@ -77,7 +82,7 @@ h1 {
     flex-wrap: wrap;
     gap: 12px;
     align-items: center;
-    margin-top: 18px;
+    margin-top: 16px;
 }
 
 button,
@@ -115,7 +120,37 @@ input[type="file"] {
     display: none;
 }
 
-#fileName {
+input[type="number"],
+select {
+    min-height: 40px;
+    border-radius: 7px;
+    border: 1px solid #48515f;
+    background: #101318;
+    color: #f4f6fa;
+    padding: 7px 10px;
+    font-size: 14px;
+    max-width: 100%;
+}
+
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    min-width: 180px;
+}
+
+.field label {
+    font-size: 13px;
+    color: #c5cedb;
+}
+
+.field input,
+.field select {
+    width: 100%;
+}
+
+#isoName,
+#hddName {
     color: #c5cedb;
     font-size: 13px;
     overflow-wrap: anywhere;
@@ -127,6 +162,18 @@ input[type="file"] {
     margin-top: 16px;
     line-height: 1.7;
     white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+
+.notice {
+    margin-top: 12px;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #69572b;
+    background: #302817;
+    color: #f3dca2;
+    font-size: 13px;
+    line-height: 1.7;
 }
 
 #screenFrame {
@@ -148,11 +195,23 @@ input[type="file"] {
     justify-content: center;
 }
 
+/*
+ * ゲストOSの表示領域はBootBoxのUIスタイルから分離する。
+ * v86の画面内に生成される要素には、グローバルフォントを強制しない。
+ */
+#screen #screen,
+#screen canvas {
+    image-rendering: pixelated;
+}
+
 #screen canvas {
     display: block;
     max-width: 100%;
     height: auto;
-    image-rendering: pixelated;
+}
+
+#screen > div[style*="white-space"] {
+    font-family: monospace !important;
 }
 
 .placeholder {
@@ -182,9 +241,12 @@ footer {
     .file-button {
         width: 100%;
     }
+
+    .field {
+        width: 100%;
+    }
 }
 </style>
-
 </head>
 
 <body>
@@ -196,74 +258,119 @@ footer {
     <section class="panel">
         <h1>仮想PCを起動</h1>
         <p class="description">
-            OSのISOファイルを選択して起動します。
-            起動したOSの操作は、通常のPCと同じように行います。
+            OSのISOファイルを選択して仮想PCを起動します。
+            HDDイメージを指定すると、ゲストOSから仮想HDDとして認識されます。
         </p>
 
+        <h2>OSイメージ</h2>
 
-    <div class="file-row">
-        <label class="file-button" for="isoFile">
-            ISOファイルを選択
-        </label>
+        <div class="file-row">
+            <label class="file-button" for="isoFile">
+                ISOファイルを選択
+            </label>
 
-        <input
-            type="file"
-            id="isoFile"
-            accept=".iso,application/octet-stream"
-        >
+            <input
+                type="file"
+                id="isoFile"
+                accept=".iso,application/octet-stream"
+            >
 
-        <span id="fileName">ISOが選択されていません</span>
-    </div>
+            <span id="isoName">ISOが選択されていません</span>
+        </div>
 
-    <div class="file-row">
-        <button class="primary" id="startButton" disabled>
-            起動
-        </button>
+        <h2>仮想HDD</h2>
 
-        <button id="stopButton" disabled>
-            停止
-        </button>
-    </div>
+        <div class="file-row">
+            <label class="file-button" for="hddFile">
+                HDDイメージを選択
+            </label>
 
-    <div id="status" role="status" aria-live="polite">
-        ISOファイルを選択してください。
-    </div>
-</section>
+            <input
+                type="file"
+                id="hddFile"
+                accept=".img,.hdd,.bin,.raw,application/octet-stream"
+            >
 
-<section class="panel">
-    <h1>仮想PC</h1>
+            <span id="hddName">HDDイメージが選択されていません</span>
+        </div>
 
-    <div id="screenFrame">
-        <div id="screen">
-            <div class="placeholder">
-                OSの画面はここに表示されます。
+        <div class="file-row">
+            <div class="field">
+                <label for="hddSize">新規HDDの希望容量</label>
+                <select id="hddSize">
+                    <option value="64">64 MB</option>
+                    <option value="128">128 MB</option>
+                    <option value="256">256 MB</option>
+                    <option value="512">512 MB</option>
+                    <option value="1024">1 GB</option>
+                    <option value="1536">1.5 GB</option>
+                    <option value="2048">2 GB</option>
+                    <option value="16384" selected>16 GB</option>
+                </select>
             </div>
         </div>
-    </div>
-</section>
 
+        <div class="notice">
+            <strong>HDD容量について</strong><br>
+            選択したHDDイメージを使う場合、実際の容量はそのファイルのサイズで決まります。
+            ここで選ぶ容量は、新規HDDを作る場合の希望値です。<br>
+            ブラウザ内で空のHDDを直接作成できる容量は、このページでは最大2GBです。
+            16GBのHDDを使う場合は、16GBのHDDイメージを選択してください。
+            HDDイメージの変更や作成前には、必要なデータのバックアップを取ってください。
+        </div>
 
+        <div class="file-row">
+            <button class="primary" id="startButton" disabled>
+                起動
+            </button>
+
+            <button id="stopButton" disabled>
+                停止
+            </button>
+        </div>
+
+        <div id="status" role="status" aria-live="polite">
+            ISOファイルを選択してください。
+        </div>
+    </section>
+
+    <section class="panel">
+        <h1>仮想PC</h1>
+
+        <div id="screenFrame">
+            <div id="screen">
+                <div class="placeholder">
+                    OSの画面はここに表示されます。
+                </div>
+            </div>
+        </div>
+    </section>
 </main>
 
 <footer>
-    BootBox Alpha 0.1
+    BootBox Alpha
 </footer>
 
-<!-- v86本体 -->
-
+<!-- v86本体：既存ファイルを使用 -->
 <script src="./lib/libv86.js"></script>
 
 <script>
 "use strict";
 
 const isoInput = document.getElementById("isoFile");
-const fileName = document.getElementById("fileName");
+const hddInput = document.getElementById("hddFile");
+const hddSizeInput = document.getElementById("hddSize");
+
+const isoName = document.getElementById("isoName");
+const hddName = document.getElementById("hddName");
+
 const startButton = document.getElementById("startButton");
 const stopButton = document.getElementById("stopButton");
 const statusElement = document.getElementById("status");
 const screenElement = document.getElementById("screen");
 
 let selectedISO = null;
+let selectedHDD = null;
 let emulator = null;
 let starting = false;
 
@@ -271,10 +378,15 @@ function setStatus(message) {
     statusElement.textContent = message;
 }
 
-function setStarting(value) {
-    starting = value;
-    startButton.disabled = !selectedISO || value || !!emulator;
-    isoInput.disabled = value || !!emulator;
+function updateButtons() {
+    startButton.disabled =
+        !selectedISO || starting || !!emulator;
+
+    isoInput.disabled = starting || !!emulator;
+    hddInput.disabled = starting || !!emulator;
+    hddSizeInput.disabled = starting || !!emulator;
+
+    stopButton.disabled = !emulator;
 }
 
 function showPlaceholder(message) {
@@ -287,30 +399,61 @@ function showPlaceholder(message) {
     screenElement.appendChild(placeholder);
 }
 
+function formatBytes(bytes) {
+    if (bytes >= 1024 ** 3) {
+        return (bytes / 1024 ** 3).toFixed(2) + " GB";
+    }
+
+    return (bytes / 1024 ** 2).toFixed(1) + " MB";
+}
+
 isoInput.addEventListener("change", () => {
-    const file = isoInput.files?.[0];
+    const file = isoInput.files?.[0] || null;
 
     if (!file) {
         selectedISO = null;
-        fileName.textContent = "ISOが選択されていません";
-        startButton.disabled = true;
+        isoName.textContent = "ISOが選択されていません";
+        updateButtons();
         return;
     }
 
     if (!file.name.toLowerCase().endsWith(".iso")) {
         selectedISO = null;
-        fileName.textContent = "ISOファイルを選択してください";
-        startButton.disabled = true;
+        isoName.textContent = "ISOファイルを選択してください";
         setStatus("ISO形式のファイルを選択してください。");
+        updateButtons();
         return;
     }
 
     selectedISO = file;
-    fileName.textContent =
-        `${file.name}（${(file.size / 1024 / 1024).toFixed(1)} MB）`;
 
-    startButton.disabled = !!emulator || starting;
-    setStatus("ISOを選択しました。起動できます。");
+    isoName.textContent =
+        `${file.name}（${formatBytes(file.size)}）`;
+
+    setStatus("ISOを選択しました。");
+    updateButtons();
+});
+
+hddInput.addEventListener("change", () => {
+    const file = hddInput.files?.[0] || null;
+    selectedHDD = file;
+
+    if (!file) {
+        hddName.textContent = "HDDイメージが選択されていません";
+        setStatus("HDDイメージを選択していない場合、HDDなしで起動します。");
+        updateButtons();
+        return;
+    }
+
+    hddName.textContent =
+        `${file.name}（${formatBytes(file.size)}）`;
+
+    setStatus(
+        "HDDイメージを選択しました。\n" +
+        "実際のHDD容量は選択したファイルのサイズで決まります。"
+    );
+
+    updateButtons();
 });
 
 startButton.addEventListener("click", async () => {
@@ -324,8 +467,23 @@ startButton.addEventListener("click", async () => {
         return;
     }
 
-    setStarting(true);
-    stopButton.disabled = true;
+    const requestedMB = Number(hddSizeInput.value);
+
+    /*
+     * 既存HDDイメージを指定していない場合、
+     * 2GBを超えるArrayBufferは作成しない。
+     */
+    if (!selectedHDD && requestedMB > 2048) {
+        setStatus(
+            "16GBのHDDを使うには、HDDイメージを選択してください。\n" +
+            "ブラウザ内で16GBの空ディスクを直接確保すると、" +
+            "メモリ不足やブラウザの制限で失敗する可能性があります。"
+        );
+        return;
+    }
+
+    starting = true;
+    updateButtons();
     setStatus("ISOを読み込んでいます……");
 
     try {
@@ -335,10 +493,7 @@ startButton.addEventListener("click", async () => {
             throw new Error("ISOファイルが空です。");
         }
 
-        setStatus("仮想PCを準備しています……");
-        screenElement.replaceChildren();
-
-        emulator = new V86({
+        const options = {
             wasm_path: "./build/v86.wasm",
 
             memory_size: 512 * 1024 * 1024,
@@ -359,16 +514,36 @@ startButton.addEventListener("click", async () => {
             },
 
             autostart: true
-        });
+        };
+
+        if (selectedHDD) {
+            setStatus("HDDイメージを読み込んでいます……");
+
+            options.hda = {
+                buffer: await selectedHDD.arrayBuffer()
+            };
+        } else if (requestedMB <= 2048) {
+            setStatus(
+                `空の仮想HDD（${requestedMB} MB）を作成しています……`
+            );
+
+            options.hda = {
+                buffer: new ArrayBuffer(requestedMB * 1024 * 1024)
+            };
+        }
+
+        screenElement.replaceChildren();
+
+        emulator = new V86(options);
 
         emulator.add_listener("emulator-ready", () => {
+            starting = false;
+            updateButtons();
+
             setStatus(
                 "仮想PCを起動しました。\n" +
                 "OSの起動処理が終わるまでお待ちください。"
             );
-
-            stopButton.disabled = false;
-            setStarting(false);
         });
 
         emulator.add_listener("emulator-started", () => {
@@ -380,8 +555,12 @@ startButton.addEventListener("click", async () => {
         });
 
         emulator.add_listener("download-progress", (data) => {
-            if (data && Number.isFinite(data.loaded) &&
-                Number.isFinite(data.total) && data.total > 0) {
+            if (
+                data &&
+                Number.isFinite(data.loaded) &&
+                Number.isFinite(data.total) &&
+                data.total > 0
+            ) {
                 const percent = Math.round(
                     data.loaded / data.total * 100
                 );
@@ -390,10 +569,10 @@ startButton.addEventListener("click", async () => {
             }
         });
 
-        stopButton.disabled = false;
+        updateButtons();
 
     } catch (error) {
-        console.error("[LinuBox]", error);
+        console.error("[BootBox]", error);
 
         if (emulator) {
             try {
@@ -402,13 +581,15 @@ startButton.addEventListener("click", async () => {
         }
 
         emulator = null;
-        stopButton.disabled = true;
-        setStarting(false);
+        starting = false;
+
+        showPlaceholder("仮想PCを起動できませんでした。");
+        updateButtons();
 
         setStatus(
             "起動に失敗しました。\n" +
             (error?.message || String(error)) +
-            "\n必要なv86ファイルと配置を確認してください。"
+            "\nISO・HDDイメージ・v86関連ファイルを確認してください。"
         );
     }
 });
@@ -419,15 +600,19 @@ stopButton.addEventListener("click", () => {
     try {
         emulator.stop();
     } catch (error) {
-        console.error("[LinuBox] 停止エラー", error);
+        console.error("[BootBox] 停止エラー", error);
     }
 
     emulator = null;
-    stopButton.disabled = true;
-    isoInput.disabled = false;
-    startButton.disabled = !selectedISO;
+    starting = false;
+
     showPlaceholder("仮想PCは停止しています。");
-    setStatus("仮想PCを停止しました。");
+    updateButtons();
+
+    setStatus(
+        "仮想PCを停止しました。\n" +
+        "注意：このページではHDDの変更内容は自動保存されません。"
+    );
 });
 </script>
 
