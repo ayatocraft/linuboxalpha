@@ -17,8 +17,8 @@
     box-sizing: border-box;
 }
 
-html, body {
-    width: 100%;
+html,
+body {
     min-height: 100%;
     margin: 0;
 }
@@ -36,7 +36,7 @@ header {
     min-height: 68px;
     display: flex;
     align-items: center;
-    padding: 0 30px;
+    padding: 0 24px;
     border-bottom: 1px solid #303746;
     background: #131720;
 }
@@ -44,7 +44,6 @@ header {
 .logo {
     font-size: 27px;
     font-weight: 700;
-    letter-spacing: .4px;
 }
 
 .logo span {
@@ -54,62 +53,70 @@ header {
 main {
     width: 100%;
     max-width: 2000px;
-    margin: 0 auto;
-    padding: 28px;
+    margin: auto;
+    padding: 24px;
     flex: 1;
     display: grid;
-    grid-template-columns: minmax(340px, 440px) minmax(0, 1fr);
+    grid-template-columns: minmax(300px, 410px) minmax(0, 1fr);
     gap: 24px;
     align-items: start;
 }
 
 .panel {
     min-width: 0;
-    padding: 28px;
+    padding: 24px;
     border: 1px solid #303746;
     border-radius: 16px;
     background: #171b25;
-    box-shadow: 0 16px 45px rgba(0, 0, 0, .22);
+    box-shadow: 0 16px 45px #0003;
 }
 
 h1 {
-    margin: 0 0 12px;
-    font-size: 30px;
-    line-height: 1.3;
+    margin: 0 0 14px;
+    font-size: 27px;
 }
 
 h2 {
-    margin: 30px 0 14px;
-    font-size: 19px;
+    margin: 28px 0 12px;
+    font-size: 18px;
 }
 
-.description {
-    margin: 0;
-    color: #b5bfd0;
-    font-size: 15px;
+p {
     line-height: 1.8;
 }
 
-.file-row {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 12px;
-    margin-top: 18px;
+.description,
+small {
+    color: #aeb9cb;
+}
+
+.description {
+    font-size: 14px;
+}
+
+small {
+    display: block;
+    margin-top: 8px;
+    line-height: 1.7;
+}
+
+button,
+.file-button,
+select {
+    min-height: 44px;
+    padding: 10px 14px;
+    border: 1px solid #465166;
+    border-radius: 9px;
+    background: #272e3b;
+    color: #fff;
+    font: inherit;
 }
 
 button,
 .file-button {
-    min-height: 48px;
-    padding: 0 18px;
-    border: 1px solid #465166;
-    border-radius: 10px;
-    background: #272e3b;
-    color: #fff;
-    font-size: 14px;
-    font-weight: 650;
     cursor: pointer;
-    transition: background .16s ease, border-color .16s ease;
+    font-size: 14px;
+    font-weight: 600;
 }
 
 button:hover,
@@ -138,20 +145,14 @@ input[type="file"] {
 
 select {
     width: 100%;
-    min-height: 48px;
-    padding: 0 14px;
-    border: 1px solid #465166;
-    border-radius: 9px;
     background: #10141c;
-    color: #fff;
-    font-size: 15px;
 }
 
 .field {
-    width: 100%;
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 8px;
+    margin-top: 16px;
 }
 
 .field label {
@@ -159,35 +160,38 @@ select {
     font-size: 14px;
 }
 
-.field small {
-    color: #8e9bb0;
-    line-height: 1.6;
+.file-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    margin-top: 14px;
 }
 
-#isoName,
-#hddName {
+.file-name {
     width: 100%;
     color: #aeb9cb;
     font-size: 13px;
     overflow-wrap: anywhere;
+    line-height: 1.7;
 }
 
 #status {
-    margin-top: 22px;
-    padding: 16px;
+    margin-top: 20px;
+    padding: 14px;
     border: 1px solid #303746;
     border-radius: 10px;
     background: #10141c;
     color: #c3cddd;
-    font-size: 14px;
+    font-size: 13px;
     line-height: 1.8;
     white-space: pre-wrap;
     overflow-wrap: anywhere;
 }
 
 .notice {
-    margin-top: 20px;
-    padding: 16px;
+    margin-top: 18px;
+    padding: 14px;
     border: 1px solid #69572b;
     border-radius: 10px;
     background: #302817;
@@ -197,88 +201,28 @@ select {
 }
 
 .info-box {
-    margin-top: 16px;
+    margin-top: 14px;
     padding: 14px;
     border: 1px solid #303746;
     border-radius: 10px;
     background: #10141c;
+    color: #b5bfd0;
     font-size: 13px;
     line-height: 1.8;
-    color: #b5bfd0;
-}
-
-.info-box strong {
-    color: #f5f7fb;
-}
-
-.meter {
-    margin-top: 18px;
-    padding: 16px;
-    border: 1px solid #303746;
-    border-radius: 10px;
-    background: #10141c;
-}
-
-.meter-title {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-bottom: 10px;
-    font-size: 14px;
-}
-
-.meter-value {
-    color: #b5bfd0;
-    font-size: 12px;
-}
-
-progress {
-    display: block;
-    width: 100%;
-    height: 10px;
-    overflow: hidden;
-    border: 0;
-    border-radius: 20px;
-    background: #303746;
-}
-
-progress::-webkit-progress-bar {
-    background: #303746;
-    border-radius: 20px;
-}
-
-progress::-webkit-progress-value {
-    background: #4389f5;
-    border-radius: 20px;
-}
-
-progress::-moz-progress-bar {
-    background: #4389f5;
-    border-radius: 20px;
-}
-
-.meter-note {
-    margin: 10px 0 0;
-    color: #8e9bb0;
-    font-size: 12px;
-    line-height: 1.7;
 }
 
 #vmPanel {
     display: flex;
     flex-direction: column;
-    min-width: 0;
 }
 
 .vm-toolbar {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 12px;
     flex-wrap: wrap;
-    margin-bottom: 18px;
+    gap: 12px;
+    margin-bottom: 16px;
 }
 
 .vm-toolbar h1 {
@@ -286,15 +230,15 @@ progress::-moz-progress-bar {
 }
 
 #screenFrame {
-    width: 100%;
     min-height: 650px;
-    background: #000;
-    border: 1px solid #343943;
-    border-radius: 12px;
-    overflow: auto;
+    width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
+    overflow: auto;
+    border: 1px solid #343943;
+    border-radius: 12px;
+    background: #000;
 }
 
 #screen {
@@ -313,89 +257,26 @@ progress::-moz-progress-bar {
     image-rendering: pixelated;
 }
 
-#screen > div[style*="white-space"] {
-    font-family: monospace !important;
-}
-
 .placeholder {
     max-width: 520px;
-    padding: 48px 24px;
+    padding: 40px 24px;
     color: #8e9bb0;
-    font-size: 16px;
+    font-size: 15px;
     line-height: 2;
     text-align: center;
 }
 
-#sidebarToggle {
-    display: none;
-}
-
 footer {
-    padding: 20px;
+    padding: 18px;
     color: #788393;
     text-align: center;
     font-size: 13px;
 }
 
-@media (min-width: 1500px) {
-    main {
-        grid-template-columns: 440px minmax(0, 1fr);
-        padding: 36px;
-        gap: 28px;
-    }
-
-    #screenFrame,
-    #screen {
-        min-height: 780px;
-    }
-}
-
-@media (max-width: 1050px) {
-    main {
-        grid-template-columns: 1fr;
-        padding: 18px;
-    }
-
-    #screenFrame,
-    #screen {
-        min-height: 480px;
-    }
-}
-
-@media (max-width: 600px) {
-    header {
-        padding: 0 18px;
-    }
-
-    main {
-        padding: 12px;
-        gap: 14px;
-    }
-
-    .panel {
-        padding: 18px;
-    }
-
-    h1 {
-        font-size: 25px;
-    }
-
-    .file-row button,
-    .file-button {
-        width: 100%;
-    }
-
-    #screenFrame,
-    #screen {
-        min-height: 300px;
-    }
-}
-
-/* 全画面表示 */
 body.fullscreen-mode main {
+    display: block;
     max-width: none;
     padding: 8px;
-    display: block;
 }
 
 body.fullscreen-mode #setupPanel {
@@ -403,19 +284,18 @@ body.fullscreen-mode #setupPanel {
 }
 
 body.fullscreen-mode #vmPanel {
-    width: 100%;
     height: calc(100vh - 90px);
 }
 
 body.fullscreen-mode #screenFrame {
-    min-height: 0;
     height: 100%;
+    min-height: 0;
     flex: 1;
 }
 
 body.fullscreen-mode #screen {
-    min-height: 0;
     height: 100%;
+    min-height: 0;
 }
 
 body.fullscreen-mode #screen canvas {
@@ -424,31 +304,66 @@ body.fullscreen-mode #screen canvas {
     object-fit: contain;
 }
 
-/* 設定サイドバーの開閉 */
 body.sidebar-collapsed main {
     grid-template-columns: 76px minmax(0, 1fr);
-}
-
-body.sidebar-collapsed #setupPanel .setupContent {
-    display: none;
 }
 
 body.sidebar-collapsed #setupPanel {
     padding: 14px;
 }
 
-body.sidebar-collapsed #setupPanel h1 {
+body.sidebar-collapsed #setupContent {
+    display: none;
+}
+
+body.sidebar-collapsed #setupTitle {
     font-size: 0;
 }
 
-body.sidebar-collapsed #setupPanel h1::after {
+body.sidebar-collapsed #setupTitle::after {
     content: "⚙";
     font-size: 28px;
 }
 
 @media (max-width: 1050px) {
+    main {
+        grid-template-columns: 1fr;
+        padding: 14px;
+    }
+
+    #screenFrame,
+    #screen {
+        min-height: 450px;
+    }
+
     body.sidebar-collapsed main {
         grid-template-columns: 76px minmax(0, 1fr);
+    }
+}
+
+@media (max-width: 600px) {
+    header {
+        padding: 0 16px;
+    }
+
+    .panel {
+        padding: 17px;
+    }
+
+    main {
+        padding: 10px;
+        gap: 14px;
+    }
+
+    .file-row button,
+    .file-row .file-button {
+        width: 100%;
+        text-align: center;
+    }
+
+    #screenFrame,
+    #screen {
+        min-height: 300px;
     }
 }
 </style>
@@ -463,12 +378,13 @@ body.sidebar-collapsed #setupPanel h1::after {
 <main>
 
 <section class="panel" id="setupPanel">
-    <h1>仮想PCの設定</h1>
+    <h1 id="setupTitle">仮想PCの設定</h1>
 
-    <div class="setupContent">
+    <div id="setupContent">
 
         <p class="description">
-            ISOファイルを読み込み、ブラウザー上で仮想PCを起動します。
+            ISOファイルからOSを起動します。
+            仮想HDDはRAW形式のファイルとして管理します。
         </p>
 
         <h2>OSイメージ</h2>
@@ -480,27 +396,41 @@ body.sidebar-collapsed #setupPanel h1::after {
 
             <input type="file" id="isoFile" accept=".iso">
 
-            <span id="isoName">ISO未選択</span>
+            <div class="file-name" id="isoName">
+                ISO未選択
+            </div>
         </div>
 
         <h2>仮想HDD</h2>
 
+        <p class="description">
+            既存のRAW形式HDDを開くか、新しいHDDファイルを作成します。
+        </p>
+
         <div class="file-row">
-            <label class="file-button" for="hddFile">
-                HDDイメージを開く
-            </label>
+            <button id="openHddButton">
+                既存のHDDを開く
+            </button>
+
+            <button id="createHddButton">
+                新しいHDDを作成
+            </button>
 
             <input
                 type="file"
                 id="hddFile"
-                accept=".img,.hdd,.bin,.raw"
+                accept=".img,.raw,.bin,.hdd"
             >
 
-            <span id="hddName">HDD未選択</span>
+            <div class="file-name" id="hddName">
+                HDD未選択
+            </div>
         </div>
 
-        <div class="field" style="margin-top:20px">
-            <label for="hddSize">新規HDD容量</label>
+        <div class="field">
+            <label for="hddSize">
+                新規HDD容量
+            </label>
 
             <select id="hddSize">
                 <option value="64">64 MB</option>
@@ -516,57 +446,63 @@ body.sidebar-collapsed #setupPanel h1::after {
             </select>
 
             <small>
-                新規HDDはメモリ上に確保します。
-                大容量では起動に失敗する場合があります。
+                新しいHDDはファイルとして作成します。
+                ディスク容量全体をJavaScriptのArrayBufferに確保しない構成です。
             </small>
         </div>
 
         <h2>メモリ</h2>
 
         <div class="field">
-            <label for="memorySize">仮想PCに割り当てるメモリ</label>
+            <label for="memorySize">
+                仮想PCに割り当てるメモリ
+            </label>
 
             <select id="memorySize">
                 <option value="128">128 MB</option>
                 <option value="256">256 MB</option>
                 <option value="512">512 MB</option>
                 <option value="1024" selected>1 GB</option>
+                <option value="1536">1.5 GB</option>
                 <option value="2048">2 GB</option>
+                <option value="3072">3 GB</option>
+                <option value="4096">4 GB</option>
             </select>
 
             <small>
-                これは仮想PCのメモリです。
-                ブラウザーやWindows本体の動作にも別途メモリが必要です。
+                設定したメモリを確保できるとは限りません。
+                ブラウザー、OS、WebAssemblyの制約により、
+                大容量設定では起動に失敗する可能性があります。
             </small>
         </div>
 
         <h2>CPU</h2>
 
         <div class="field">
-            <label for="cpuCores">CPUコア数</label>
+            <label>CPUコア数</label>
 
-            <select id="cpuCores" disabled>
-                <option selected>1コア（変更不可）</option>
+            <select disabled>
+                <option selected>1コア（固定）</option>
             </select>
 
             <small>
-                現在使用しているv86はマルチコアCPUに対応していないため、
-                コア数の変更はできません。
+                現在のv86では、複数の仮想CPUコアを利用する設定はできません。
             </small>
         </div>
 
         <div class="notice">
-            <strong>Windows 8について</strong><br>
-            32bit版Windows 8を想定しています。
-            v86ではWindows 8がすべての環境で動作するとは限りません。
-            インストール用ISOがBIOS起動に対応していることも必要です。
+            <strong>注意</strong><br>
+            Windows 8の動作は保証されません。
+            ISOの種類、仮想メモリ、v86の対応状況によっては、
+            インストール中や起動中に停止する場合があります。
         </div>
 
         <div class="info-box">
-            <strong>HDDの永続化</strong><br>
-            読み込んだHDDイメージはIndexedDBに保存できます。
-            保存したイメージは、次回同じファイルを選択したときに復元できます。
-            新規HDDはこの保存機能の対象外です。
+            <strong>HDDの保存について</strong><br>
+            v86は変更されたディスクブロックをキャッシュします。
+            保存時には元のファイルの未変更部分を再利用し、
+            変更部分を反映したファイルを作成します。
+            ブラウザーが対応していれば、元のHDDファイルに保存できます。
         </div>
 
         <div class="file-row">
@@ -584,48 +520,25 @@ body.sidebar-collapsed #setupPanel h1::after {
         </div>
 
         <div id="status" role="status" aria-live="polite">
-            ISOファイルを選択してください。
-        </div>
-
-        <h2>ストレージ情報</h2>
-
-        <div class="meter">
-            <div class="meter-title">
-                <strong>仮想HDDイメージ</strong>
-                <span class="meter-value" id="hddCapacityText">未選択</span>
-            </div>
-
-            <progress id="hddCapacityBar" value="0" max="100"></progress>
-
-            <p class="meter-note" id="hddCapacityNote">
-                HDDイメージを選択するか、新規HDD容量を指定してください。
-                このバーはイメージ容量を表し、Windows内の使用済み容量ではありません。
-            </p>
-        </div>
-
-        <div class="meter">
-            <div class="meter-title">
-                <strong>ブラウザーストレージ</strong>
-                <span class="meter-value" id="browserStorageText">確認中…</span>
-            </div>
-
-            <progress id="browserStorageBar" value="0" max="100"></progress>
-
-            <p class="meter-note" id="browserStorageNote">
-                ブラウザーのストレージ使用量と推定上限を取得しています。
-            </p>
+            ISOファイルとHDDファイルを選択してください。
         </div>
 
     </div>
 </section>
 
 <section class="panel" id="vmPanel">
+
     <div class="vm-toolbar">
         <h1>仮想PC</h1>
 
         <div class="file-row">
-            <button id="sidebarToggle">設定を折りたたむ</button>
-            <button id="fullscreenButton">全画面表示</button>
+            <button id="sidebarToggle">
+                設定を折りたたむ
+            </button>
+
+            <button id="fullscreenButton">
+                全画面表示
+            </button>
         </div>
     </div>
 
@@ -634,10 +547,11 @@ body.sidebar-collapsed #setupPanel h1::after {
             <div class="placeholder">
                 <strong>BootBox</strong><br>
                 仮想PCの画面はここに表示されます。<br>
-                左側の設定からISOを選択して起動してください。
+                左側の設定からISOとHDDを選択してください。
             </div>
         </div>
     </div>
+
 </section>
 
 </main>
@@ -654,11 +568,14 @@ body.sidebar-collapsed #setupPanel h1::after {
 const isoInput = document.getElementById("isoFile");
 const hddInput = document.getElementById("hddFile");
 
+const isoName = document.getElementById("isoName");
+const hddName = document.getElementById("hddName");
+
 const hddSizeInput = document.getElementById("hddSize");
 const memorySizeInput = document.getElementById("memorySize");
 
-const isoName = document.getElementById("isoName");
-const hddName = document.getElementById("hddName");
+const openHddButton = document.getElementById("openHddButton");
+const createHddButton = document.getElementById("createHddButton");
 
 const startButton = document.getElementById("startButton");
 const saveHddButton = document.getElementById("saveHddButton");
@@ -668,33 +585,26 @@ const statusElement = document.getElementById("status");
 const screenElement = document.getElementById("screen");
 const screenFrame = document.getElementById("screenFrame");
 
-const hddCapacityText = document.getElementById("hddCapacityText");
-const hddCapacityBar = document.getElementById("hddCapacityBar");
-const hddCapacityNote = document.getElementById("hddCapacityNote");
-
-const browserStorageText = document.getElementById("browserStorageText");
-const browserStorageBar = document.getElementById("browserStorageBar");
-const browserStorageNote = document.getElementById("browserStorageNote");
-
 const fullscreenButton = document.getElementById("fullscreenButton");
 const sidebarToggle = document.getElementById("sidebarToggle");
 
 /* 状態 */
 
 let selectedISO = null;
-let selectedHDD = null;
+let selectedHDDFile = null;
+let selectedHDDHandle = null;
 
 let emulator = null;
 let starting = false;
 let stopping = false;
 
-let activeHddBuffer = null;
-let activeHddPersistKey = null;
-let activeHddIsImported = false;
+let activeHDDHandle = null;
+let activeHDDFile = null;
+let activeDiskAdapter = null;
 
-let dbPromise = null;
+let saveInProgress = false;
 
-/* 基本関数 */
+/* 共通処理 */
 
 function setStatus(message) {
     statusElement.textContent = message;
@@ -727,15 +637,23 @@ function formatBytes(bytes) {
 function updateButtons() {
     const busy = starting || stopping || !!emulator;
 
-    startButton.disabled = !selectedISO || busy;
+    startButton.disabled =
+        !selectedISO ||
+        !selectedHDDFile ||
+        busy;
 
-    stopButton.disabled = !emulator || stopping;
+    stopButton.disabled =
+        !emulator ||
+        stopping;
 
     saveHddButton.disabled =
         !emulator ||
         stopping ||
-        !activeHddIsImported ||
-        !activeHddBuffer;
+        saveInProgress ||
+        !activeDiskAdapter;
+
+    openHddButton.disabled = busy;
+    createHddButton.disabled = busy;
 
     isoInput.disabled = busy;
     hddInput.disabled = busy;
@@ -746,40 +664,134 @@ function updateButtons() {
 function showPlaceholder(message) {
     screenElement.replaceChildren();
 
-    const placeholder = document.createElement("div");
-    placeholder.className = "placeholder";
-    placeholder.textContent = message;
+    const element = document.createElement("div");
+    element.className = "placeholder";
+    element.textContent = message;
 
-    screenElement.appendChild(placeholder);
+    screenElement.appendChild(element);
 }
 
-/* HDD容量表示 */
-
-function updateHddMeter(bytes, source) {
-    if (!Number.isFinite(bytes) || bytes <= 0) {
-        hddCapacityText.textContent = "未選択";
-        hddCapacityBar.value = 0;
-
-        hddCapacityNote.textContent =
-            "HDDイメージを選択するか、新規HDD容量を指定してください。";
-
+function refreshHddName() {
+    if (!selectedHDDFile) {
+        hddName.textContent = "HDD未選択";
         return;
     }
 
-    hddCapacityText.textContent = formatBytes(bytes);
-    hddCapacityBar.value = 100;
-
-    hddCapacityNote.textContent =
-        source +
-        "：" + formatBytes(bytes) +
-        "。これはイメージの容量であり、Windows内で使用されている容量ではありません。";
+    hddName.textContent =
+        selectedHDDFile.name +
+        "（" + formatBytes(selectedHDDFile.size) + "）";
 }
 
-function updateNewHddMeter() {
-    if (selectedHDD) {
-        updateHddMeter(
-            selectedHDD.size,
-            "選択したHDDイメージ"
+/* ISO */
+
+isoInput.addEventListener("change", () => {
+    selectedISO = isoInput.files?.[0] || null;
+
+    isoName.textContent = selectedISO
+        ? selectedISO.name + "（" + formatBytes(selectedISO.size) + "）"
+        : "ISO未選択";
+
+    setStatus(
+        selectedISO
+            ? "ISOを選択しました。HDDを選択して起動してください。"
+            : "ISO未選択"
+    );
+
+    updateButtons();
+});
+
+/* HDDファイルを開く */
+
+async function chooseExistingHDD() {
+    if (starting || stopping || emulator) {
+        return;
+    }
+
+    try {
+        if ("showOpenFilePicker" in window) {
+            const handles = await window.showOpenFilePicker({
+                multiple: false,
+                types: [{
+                    description: "RAW HDD image",
+                    accept: {
+                        "application/octet-stream": [
+                            ".img",
+                            ".raw",
+                            ".bin",
+                            ".hdd"
+                        ]
+                    }
+                }]
+            });
+
+            const handle = handles[0];
+            const file = await handle.getFile();
+
+            if (!file.size) {
+                throw new Error("選択したHDDファイルが空です。");
+            }
+
+            selectedHDDHandle = handle;
+            selectedHDDFile = file;
+        } else {
+            selectedHDDHandle = null;
+            hddInput.click();
+            return;
+        }
+
+        refreshHddName();
+
+        setStatus(
+            "HDDファイルを選択しました。\n" +
+            "容量：" + formatBytes(selectedHDDFile.size) + "\n" +
+            "必要なディスク範囲を読み込む方式で起動します。"
+        );
+
+    } catch (error) {
+        if (error?.name === "AbortError") {
+            return;
+        }
+
+        console.error("[BootBox] HDD選択エラー", error);
+
+        setStatus(
+            "HDDファイルを開けませんでした。\n" +
+            (error?.message || String(error))
+        );
+    }
+
+    updateButtons();
+}
+
+openHddButton.addEventListener("click", chooseExistingHDD);
+
+hddInput.addEventListener("change", () => {
+    selectedHDDFile = hddInput.files?.[0] || null;
+    selectedHDDHandle = null;
+
+    refreshHddName();
+
+    setStatus(
+        selectedHDDFile
+            ? "HDDファイルを選択しました。\n" +
+              "このブラウザーでは、変更後のHDDを別ファイルとして保存する必要があります。"
+            : "HDD未選択"
+    );
+
+    updateButtons();
+});
+
+/* 新規HDD作成 */
+
+async function createNewHDD() {
+    if (starting || stopping || emulator) {
+        return;
+    }
+
+    if (!("showSaveFilePicker" in window)) {
+        setStatus(
+            "このブラウザーではHDDファイルを指定サイズで直接作成できません。\n" +
+            "ChromeまたはEdgeの最新版で、HTTPSのページから試してください。"
         );
 
         return;
@@ -787,285 +799,272 @@ function updateNewHddMeter() {
 
     const mb = Number(hddSizeInput.value);
 
-    updateHddMeter(
-        mb * 1024 * 1024,
-        "新規HDDの設定容量"
-    );
-}
-
-/* IndexedDB */
-
-function openDatabase() {
-    if (dbPromise) {
-        return dbPromise;
+    if (!Number.isSafeInteger(mb) || mb <= 0) {
+        setStatus("HDD容量の設定が正しくありません。");
+        return;
     }
 
-    dbPromise = new Promise((resolve, reject) => {
-        if (!("indexedDB" in window)) {
-            reject(new Error("このブラウザーではIndexedDBを使用できません。"));
-            return;
-        }
+    const bytes = mb * 1024 * 1024;
 
-        const request = indexedDB.open("BootBoxStorage", 1);
+    const proceed = confirm(
+        "新しいRAW HDDファイルを作成します。\n\n" +
+        "容量：" + formatBytes(bytes) + "\n\n" +
+        "保存先を選択してください。"
+    );
 
-        request.onupgradeneeded = () => {
-            const db = request.result;
-
-            if (!db.objectStoreNames.contains("hddImages")) {
-                db.createObjectStore("hddImages", {
-                    keyPath: "id"
-                });
-            }
-        };
-
-        request.onsuccess = () => {
-            resolve(request.result);
-        };
-
-        request.onerror = () => {
-            reject(request.error || new Error("IndexedDBを開けませんでした。"));
-        };
-    });
-
-    return dbPromise;
-}
-
-function makeHddKey(file) {
-    /*
-     * 同じ名前・サイズ・更新日時のファイルは同じ保存先として扱う。
-     * ファイル名や更新日時が変わった場合は別の保存先になる。
-     */
-    return [
-        "hdd",
-        file.name,
-        file.size,
-        file.lastModified
-    ].join(":");
-}
-
-async function getSavedHdd(key) {
-    const db = await openDatabase();
-
-    return new Promise((resolve, reject) => {
-        const tx = db.transaction("hddImages", "readonly");
-        const store = tx.objectStore("hddImages");
-        const request = store.get(key);
-
-        request.onsuccess = () => {
-            resolve(request.result || null);
-        };
-
-        request.onerror = () => {
-            reject(request.error || new Error("保存データを読み込めませんでした。"));
-        };
-    });
-}
-
-async function putSavedHdd(key, buffer, fileName) {
-    const db = await openDatabase();
-
-    return new Promise((resolve, reject) => {
-        const tx = db.transaction("hddImages", "readwrite");
-
-        tx.objectStore("hddImages").put({
-            id: key,
-            fileName,
-            size: buffer.byteLength,
-            savedAt: Date.now(),
-            buffer
-        });
-
-        tx.oncomplete = () => resolve();
-
-        tx.onerror = () => {
-            reject(tx.error || new Error("HDDを保存できませんでした。"));
-        };
-
-        tx.onabort = () => {
-            reject(tx.error || new Error("HDDの保存が中断されました。"));
-        };
-    });
-}
-
-/* ブラウザーストレージ表示 */
-
-async function updateBrowserStorageMeter() {
-    if (!navigator.storage || !navigator.storage.estimate) {
-        browserStorageText.textContent = "取得不可";
-        browserStorageBar.value = 0;
-
-        browserStorageNote.textContent =
-            "このブラウザーではストレージの使用量を取得できません。";
-
+    if (!proceed) {
         return;
     }
 
     try {
-        const estimate = await navigator.storage.estimate();
-
-        const usage = estimate.usage;
-        const quota = estimate.quota;
-
-        if (
-            !Number.isFinite(usage) ||
-            !Number.isFinite(quota) ||
-            quota <= 0
-        ) {
-            throw new Error("ストレージ情報を取得できませんでした。");
-        }
-
-        const percentage = Math.min(
-            100,
-            Math.round(usage / quota * 100)
-        );
-
-        browserStorageText.textContent =
-            formatBytes(usage) + " / " + formatBytes(quota);
-
-        browserStorageBar.value = percentage;
-
-        browserStorageNote.textContent =
-            "推定使用量：" + percentage + "%。ブラウザー全体のストレージ情報であり、仮想HDD内部の使用量ではありません。";
-    } catch (error) {
-        console.warn("[BootBox] ストレージ情報取得エラー", error);
-
-        browserStorageText.textContent = "取得失敗";
-
-        browserStorageNote.textContent =
-            "ストレージ情報を取得できませんでした。";
-    }
-}
-
-/* ISO選択 */
-
-isoInput.addEventListener("change", () => {
-    selectedISO = isoInput.files?.[0] || null;
-
-    if (selectedISO) {
-        isoName.textContent =
-            selectedISO.name + "（" + formatBytes(selectedISO.size) + "）";
-
-        setStatus("ISOを選択しました。");
-    } else {
-        isoName.textContent = "ISO未選択";
-    }
-
-    updateButtons();
-});
-
-/* HDD選択 */
-
-hddInput.addEventListener("change", () => {
-    selectedHDD = hddInput.files?.[0] || null;
-
-    if (selectedHDD) {
-        hddName.textContent =
-            selectedHDD.name + "（" + formatBytes(selectedHDD.size) + "）";
+        const handle = await window.showSaveFilePicker({
+            suggestedName: "bootbox-disk.img",
+            types: [{
+                description: "RAW HDD image",
+                accept: {
+                    "application/octet-stream": [".img"]
+                }
+            }]
+        });
 
         setStatus(
-            "HDDイメージを選択しました。\n" +
-            "起動時にIndexedDBの保存データがあるか確認します。"
+            "HDDファイルを作成しています……\n" +
+            "容量：" + formatBytes(bytes)
         );
 
-        updateHddMeter(
-            selectedHDD.size,
-            "選択したHDDイメージ"
+        /*
+         * FileSystemWritableFileStream.truncate() でファイルの長さを設定。
+         * 巨大なゼロ埋めArrayBufferは作成しない。
+         */
+        const writable = await handle.createWritable();
+
+        await writable.truncate(bytes);
+        await writable.close();
+
+        selectedHDDHandle = handle;
+        selectedHDDFile = await handle.getFile();
+
+        refreshHddName();
+
+        setStatus(
+            "新しいHDDファイルを作成しました。\n" +
+            "容量：" + formatBytes(selectedHDDFile.size) + "\n" +
+            "このファイルを仮想HDDとして使用できます。"
         );
-    } else {
-        hddName.textContent = "HDD未選択";
-        updateNewHddMeter();
+
+    } catch (error) {
+        if (error?.name === "AbortError") {
+            return;
+        }
+
+        console.error("[BootBox] HDD作成エラー", error);
+
+        setStatus(
+            "HDDファイルを作成できませんでした。\n" +
+            (error?.message || String(error))
+        );
     }
 
     updateButtons();
-});
+}
 
-/* 新規HDD容量の変更 */
+createHddButton.addEventListener("click", createNewHDD);
 
-hddSizeInput.addEventListener("change", updateNewHddMeter);
+/* v86ディスクアダプターの取得 */
 
-/* 保存済みHDDの選択 */
+function getActiveDiskAdapter(instance) {
+    /*
+     * 現在のlibv86.js内部構造から、
+     * IDEプライマリマスターのディスクアダプターを取得する。
+     *
+     * これはv86の内部実装に依存するため、
+     * ライブラリを更新した場合は再確認が必要。
+     */
+    const disk =
+        instance?.v86?.devices?.ide?.primary?.master?.buffer;
 
-async function loadHddBuffer(file) {
-    const key = makeHddKey(file);
+    if (!disk) {
+        throw new Error(
+            "v86のHDDアダプターを取得できません。\n" +
+            "lib/libv86.jsのバージョンと内部構造を確認してください。"
+        );
+    }
+
+    if (typeof disk.get_as_file !== "function") {
+        throw new Error(
+            "このv86ビルドではget_as_file()を利用できません。"
+        );
+    }
+
+    return disk;
+}
+
+/* HDD保存 */
+
+async function saveCurrentHDD() {
+    if (!emulator || !activeDiskAdapter || !activeHDDFile) {
+        throw new Error("保存対象のHDDがありません。");
+    }
+
+    /*
+     * get_as_file() は、元のFileのスライスと、
+     * 変更されたディスクブロックを組み合わせたFileを返す。
+     * ここでHDD全体をArrayBufferへ変換しない。
+     */
+    const updatedFile = activeDiskAdapter.get_as_file(
+        activeHDDFile.name || "bootbox-disk.img"
+    );
+
+    if (!(updatedFile instanceof Blob)) {
+        throw new Error(
+            "変更後のHDDファイルを作成できませんでした。"
+        );
+    }
+
+    if (updatedFile.size !== activeHDDFile.size) {
+        throw new Error(
+            "HDDのサイズが変わっています。\n" +
+            "安全のため保存を中止しました。"
+        );
+    }
+
+    if (activeHDDHandle) {
+        /*
+         * File System Access APIで選択したファイルへ書き戻す。
+         * Blob/Fileをそのままストリームに渡し、
+         * JavaScriptのArrayBufferには変換しない。
+         */
+        let permission = "granted";
+
+        if (activeHDDHandle.queryPermission) {
+            permission = await activeHDDHandle.queryPermission({
+                mode: "readwrite"
+            });
+        }
+
+        if (permission !== "granted" &&
+            activeHDDHandle.requestPermission) {
+            permission = await activeHDDHandle.requestPermission({
+                mode: "readwrite"
+            });
+        }
+
+        if (permission !== "granted") {
+            throw new Error(
+                "HDDファイルへの書き込み許可がありません。"
+            );
+        }
+
+        const writable = await activeHDDHandle.createWritable();
+
+        try {
+            await writable.write({
+                type: "write",
+                position: 0,
+                data: updatedFile
+            });
+
+            await writable.truncate(updatedFile.size);
+
+            await writable.close();
+        } catch (error) {
+            try {
+                await writable.abort();
+            } catch (_) {}
+
+            throw error;
+        }
+
+        activeHDDFile = await activeHDDHandle.getFile();
+
+        setStatus(
+            "HDDを元のファイルに保存しました。\n" +
+            "ファイル：" + activeHDDFile.name + "\n" +
+            "容量：" + formatBytes(activeHDDFile.size)
+        );
+
+        return;
+    }
+
+    /*
+     * 通常の<input type=file>で開いたファイルは
+     * 元のファイルへ直接書き戻せない。
+     * その場合は変更後のRAWイメージをダウンロードする。
+     */
+    const url = URL.createObjectURL(updatedFile);
+    const link = document.createElement("a");
+
+    link.href = url;
+    link.download = activeHDDFile.name || "bootbox-disk.img";
+
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+
+    setTimeout(() => URL.revokeObjectURL(url), 60000);
+
+    setStatus(
+        "変更後のHDDファイルをダウンロードしました。\n" +
+        "元のファイルを残す場合は、ダウンロードしたファイルを別名で保存してください。"
+    );
+}
+
+saveHddButton.addEventListener("click", async () => {
+    if (saveInProgress || !emulator) {
+        return;
+    }
+
+    saveInProgress = true;
+    updateButtons();
 
     try {
-        const saved = await getSavedHdd(key);
+        setStatus(
+            "HDDを保存しています……\n" +
+            "大容量ディスクでは時間がかかる場合があります。"
+        );
 
-        if (
-            saved &&
-            saved.buffer instanceof ArrayBuffer &&
-            saved.buffer.byteLength === file.size
-        ) {
-            const restore = confirm(
-                "このHDDイメージには保存データがあります。\n\n" +
-                "ファイル：" + file.name + "\n" +
-                "容量：" + formatBytes(file.size) + "\n" +
-                "最終保存：" + new Date(saved.savedAt).toLocaleString() + "\n\n" +
-                "保存したHDDを復元しますか？\n\n" +
-                "「キャンセル」を押すと、選択した元ファイルを読み込みます。"
-            );
+        await saveCurrentHDD();
 
-            if (restore) {
-                return {
-                    buffer: saved.buffer,
-                    persistKey: key,
-                    imported: true,
-                    restored: true
-                };
-            }
-        }
     } catch (error) {
-        console.warn("[BootBox] 保存済みHDDの確認に失敗", error);
+        console.error("[BootBox] HDD保存エラー", error);
 
         setStatus(
-            "保存済みHDDを確認できませんでした。\n" +
-            "元のHDDイメージを読み込みます。"
+            "HDDを保存できませんでした。\n" +
+            (error?.message || String(error))
         );
+    } finally {
+        saveInProgress = false;
+        updateButtons();
     }
-
-    return {
-        buffer: await file.arrayBuffer(),
-        persistKey: key,
-        imported: true,
-        restored: false
-    };
-}
+});
 
 /* 起動 */
 
 startButton.addEventListener("click", async () => {
-    if (!selectedISO || starting || emulator || stopping) {
+    if (
+        !selectedISO ||
+        !selectedHDDFile ||
+        starting ||
+        stopping ||
+        emulator
+    ) {
         return;
     }
 
     if (typeof window.V86 !== "function") {
         setStatus(
             "v86を読み込めません。\n" +
-            "./lib/libv86.js の配置を確認してください。"
+            "./lib/libv86.jsの配置を確認してください。"
         );
 
         return;
     }
 
-    const requestedMB = Number(hddSizeInput.value);
     const memoryMB = Number(memorySizeInput.value);
 
-    if (!Number.isInteger(memoryMB) || memoryMB < 128) {
-        setStatus("メモリ容量の設定が正しくありません。");
+    if (!Number.isSafeInteger(memoryMB) || memoryMB < 128) {
+        setStatus("メモリ設定が正しくありません。");
         return;
-    }
-
-    if (!selectedHDD && requestedMB > 2048) {
-        const proceed = confirm(
-            "新規HDD容量は " + (requestedMB / 1024) + " GB です。\n\n" +
-            "この方式ではHDD全体をメモリ上に確保します。\n" +
-            "PCのメモリ不足やブラウザーの停止が発生する可能性があります。\n\n" +
-            "続行しますか？"
-        );
-
-        if (!proceed) {
-            return;
-        }
     }
 
     starting = true;
@@ -1074,59 +1073,29 @@ startButton.addEventListener("click", async () => {
     let localEmulator = null;
 
     try {
-        setStatus("ISOを読み込んでいます……");
+        setStatus(
+            "仮想PCを準備しています……\n" +
+            "ISO：" + selectedISO.name + "\n" +
+            "HDD：" + selectedHDDFile.name + "\n" +
+            "メモリ：" + memoryMB + " MB"
+        );
 
+        /*
+         * ISOはCD-ROM用に読み込む。
+         * HDDはFileのまま渡す。
+         * HDDに対してarrayBuffer()を呼び出さない。
+         */
         const isoBuffer = await selectedISO.arrayBuffer();
 
         if (!isoBuffer.byteLength) {
             throw new Error("ISOファイルが空です。");
         }
 
-        let hddBuffer;
-        let persistKey = null;
-        let importedHdd = false;
-
-        if (selectedHDD) {
-            setStatus("HDDイメージを確認しています……");
-
-            const result = await loadHddBuffer(selectedHDD);
-
-            hddBuffer = result.buffer;
-            persistKey = result.persistKey;
-            importedHdd = true;
-
-            setStatus(
-                result.restored
-                    ? "IndexedDBから保存済みHDDを復元しました。"
-                    : "選択したHDDイメージを読み込みました。"
-            );
-        } else {
-            setStatus(
-                "空の仮想HDD（" + requestedMB + " MB）を作成しています……"
-            );
-
-            /*
-             * 注意：
-             * この方式ではHDD全体をメモリに確保する。
-             * 16GB以上では環境によって確保に失敗する。
-             */
-            hddBuffer = new ArrayBuffer(
-                requestedMB * 1024 * 1024
-            );
+        if (!selectedHDDFile.size) {
+            throw new Error("HDDファイルが空です。");
         }
 
-        activeHddBuffer = hddBuffer;
-        activeHddPersistKey = persistKey;
-        activeHddIsImported = importedHdd;
-
         screenElement.replaceChildren();
-
-        setStatus(
-            "仮想PCを準備しています……\n" +
-            "メモリ：" + memoryMB + " MB\n" +
-            "HDD：" + formatBytes(hddBuffer.byteLength) + "\n" +
-            "CPU：1コア"
-        );
 
         const options = {
             wasm_path: "./build/v86.wasm",
@@ -1144,28 +1113,22 @@ startButton.addEventListener("click", async () => {
                 url: "./bios/vgabios.bin"
             },
 
-            /*
-             * Windowsのインストール用ISOを仮想CD-ROMとして接続。
-             */
             cdrom: {
                 buffer: isoBuffer
             },
 
             /*
-             * 仮想HDD。
-             * v86がこのバッファに書き込むことを想定している。
+             * 重要：
+             * HDDのFileを直接渡す。
+             * async:trueでディスク全体の読み込みを避け、
+             * v86のFileベースのブロックキャッシュを利用する。
              */
             hda: {
-                buffer: hddBuffer
+                buffer: selectedHDDFile,
+                async: true
             },
 
-            /*
-             * ACPIは有効化しない。
-             * v86のACPIは実験的な実装で、Windowsの起動を
-             * 必ず改善するとは限らないため。
-             */
             acpi: false,
-
             autostart: true
         };
 
@@ -1174,6 +1137,21 @@ startButton.addEventListener("click", async () => {
 
         localEmulator.add_listener("emulator-ready", () => {
             if (emulator !== localEmulator) {
+                return;
+            }
+
+            try {
+                activeDiskAdapter = getActiveDiskAdapter(localEmulator);
+            } catch (error) {
+                console.error("[BootBox] HDDアダプター取得エラー", error);
+
+                setStatus(
+                    "仮想PCは準備されましたが、HDD保存機能を初期化できません。\n" +
+                    (error?.message || String(error))
+                );
+
+                starting = false;
+                updateButtons();
                 return;
             }
 
@@ -1186,7 +1164,8 @@ startButton.addEventListener("click", async () => {
                 "OSの起動を待っています。\n\n" +
                 "メモリ：" + memoryMB + " MB\n" +
                 "CPU：1コア\n" +
-                "HDD：" + formatBytes(hddBuffer.byteLength)
+                "HDD：" + formatBytes(selectedHDDFile.size) + "\n" +
+                "HDD方式：Fileベースのブロックキャッシュ"
             );
         });
 
@@ -1197,7 +1176,7 @@ startButton.addEventListener("click", async () => {
 
             setStatus(
                 "仮想PCが起動しています。\n" +
-                "Windowsのインストーラーが表示されるまで待ってください。"
+                "OSの起動が完了するまで待ってください。"
             );
         });
 
@@ -1208,23 +1187,6 @@ startButton.addEventListener("click", async () => {
 
             setStatus("仮想PCが停止しました。");
         });
-
-        localEmulator.add_listener("download-progress", (data) => {
-            if (
-                data &&
-                Number.isFinite(data.loaded) &&
-                Number.isFinite(data.total) &&
-                data.total > 0
-            ) {
-                const percent = Math.round(
-                    data.loaded / data.total * 100
-                );
-
-                setStatus("仮想PCの準備中…… " + percent + "%");
-            }
-        });
-
-        updateButtons();
 
     } catch (error) {
         console.error("[BootBox] 起動エラー", error);
@@ -1237,82 +1199,22 @@ startButton.addEventListener("click", async () => {
             emulator = null;
         }
 
-        activeHddBuffer = null;
-        activeHddPersistKey = null;
-        activeHddIsImported = false;
+        activeDiskAdapter = null;
+        activeHDDHandle = null;
+        activeHDDFile = null;
 
         starting = false;
 
         showPlaceholder("仮想PCを起動できませんでした。");
 
-        updateButtons();
-
         setStatus(
             "起動に失敗しました。\n" +
             (error?.message || String(error)) +
-            "\n\nISO・HDDイメージ・メモリ設定・v86関連ファイルを確認してください。"
-        );
-    }
-});
-
-/* HDDを保存 */
-
-async function saveCurrentHdd() {
-    if (!emulator || !activeHddBuffer || !activeHddIsImported) {
-        throw new Error(
-            "保存できるHDDイメージがありません。読み込んだHDDイメージが必要です。"
+            "\n\nISO、HDD、メモリ設定、v86関連ファイルを確認してください。"
         );
     }
 
-    if (!activeHddPersistKey) {
-        throw new Error("HDDの保存先を特定できません。");
-    }
-
-    setStatus(
-        "HDDをIndexedDBに保存しています……\n" +
-        "容量：" + formatBytes(activeHddBuffer.byteLength) + "\n" +
-        "大きなイメージでは時間がかかる場合があります。"
-    );
-
-    /*
-     * IndexedDBへの書き込みはブラウザー内で行われる。
-     * 大容量データはブラウザーの保存容量制限に注意。
-     */
-    await putSavedHdd(
-        activeHddPersistKey,
-        activeHddBuffer,
-        selectedHDD?.name || "HDDイメージ"
-    );
-
-    await updateBrowserStorageMeter();
-
-    setStatus(
-        "HDDイメージをIndexedDBに保存しました。\n" +
-        "容量：" + formatBytes(activeHddBuffer.byteLength) + "\n" +
-        "次回、同じHDDイメージを選択すると保存データを復元できます。"
-    );
-}
-
-saveHddButton.addEventListener("click", async () => {
-    if (stopping) {
-        return;
-    }
-
-    saveHddButton.disabled = true;
-
-    try {
-        await saveCurrentHdd();
-    } catch (error) {
-        console.error("[BootBox] HDD保存エラー", error);
-
-        setStatus(
-            "HDDを保存できませんでした。\n" +
-            (error?.message || String(error)) +
-            "\nブラウザーの保存容量やメモリを確認してください。"
-        );
-    } finally {
-        updateButtons();
-    }
+    updateButtons();
 });
 
 /* 停止 */
@@ -1329,7 +1231,9 @@ stopButton.addEventListener("click", async () => {
 
     try {
         /*
-         * 先に仮想PCを停止してから、HDDバッファを保存する。
+         * 先に仮想PCを停止する。
+         * 停止後にディスクを保存することで、
+         * 実行中のディスク変更との競合を避ける。
          */
         try {
             instance.stop();
@@ -1340,46 +1244,42 @@ stopButton.addEventListener("click", async () => {
         emulator = null;
         starting = false;
 
-        if (activeHddIsImported && activeHddBuffer && activeHddPersistKey) {
-            setStatus("仮想PCを停止しました。HDDを保存しています……");
+        if (activeDiskAdapter && activeHDDFile) {
+            setStatus(
+                "仮想PCを停止しました。\n" +
+                "HDDを保存しています……"
+            );
 
             try {
-                await putSavedHdd(
-                    activeHddPersistKey,
-                    activeHddBuffer,
-                    selectedHDD?.name || "HDDイメージ"
-                );
-
-                setStatus(
-                    "仮想PCを停止し、HDDをIndexedDBに保存しました。\n" +
-                    "次回、同じHDDイメージを選択すると復元できます。"
-                );
+                await saveCurrentHDD();
             } catch (error) {
                 console.error("[BootBox] 停止時の保存エラー", error);
 
                 setStatus(
-                    "仮想PCは停止しましたが、HDDの保存に失敗しました。\n" +
-                    (error?.message || String(error))
+                    "仮想PCは停止しましたが、HDDを保存できませんでした。\n" +
+                    (error?.message || String(error)) +
+                    "\n「HDDを保存」を再度試してください。"
                 );
             }
         } else {
             setStatus(
                 "仮想PCを停止しました。\n" +
-                "新規HDDは永続化されません。"
+                "HDDアダプターを取得できていないため、自動保存できませんでした。"
             );
         }
 
     } finally {
-        activeHddBuffer = null;
-        activeHddPersistKey = null;
-        activeHddIsImported = false;
+        activeDiskAdapter = null;
 
+        /*
+         * 選択中のHDDファイルとハンドルは保持する。
+         * 次回の起動時に同じHDDを再利用できる。
+         */
         stopping = false;
 
         showPlaceholder("仮想PCは停止しています。");
 
         updateButtons();
-        updateBrowserStorageMeter();
     }
 });
 
@@ -1389,9 +1289,6 @@ fullscreenButton.addEventListener("click", async () => {
     try {
         if (!document.fullscreenElement) {
             await screenFrame.requestFullscreen();
-
-            document.body.classList.add("fullscreen-mode");
-            fullscreenButton.textContent = "全画面表示を終了";
         } else {
             await document.exitFullscreen();
         }
@@ -1434,15 +1331,7 @@ document.addEventListener("keydown", (event) => {
 
 /* 初期化 */
 
-updateNewHddMeter();
 updateButtons();
-updateBrowserStorageMeter();
-
-/*
- * ストレージ使用量を定期的に更新。
- * これはブラウザーのストレージ量であり、WindowsのCドライブ使用量ではない。
- */
-setInterval(updateBrowserStorageMeter, 15000);
 
 </script>
 
