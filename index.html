@@ -134,6 +134,15 @@ button.primary:hover {
     background: #287de8;
 }
 
+button.danger {
+    background: #572b32;
+    border-color: #87414b;
+}
+
+button.danger:hover {
+    background: #71343d;
+}
+
 button:disabled {
     opacity: .45;
     cursor: not-allowed;
@@ -141,6 +150,13 @@ button:disabled {
 
 input[type="file"] {
     display: none;
+}
+
+input[type="checkbox"] {
+    accent-color: #438df5;
+    width: 17px;
+    height: 17px;
+    vertical-align: middle;
 }
 
 select {
@@ -209,6 +225,57 @@ select {
     color: #b5bfd0;
     font-size: 13px;
     line-height: 1.8;
+}
+
+.device-list {
+    margin-top: 12px;
+    border: 1px solid #303746;
+    border-radius: 10px;
+    overflow: hidden;
+    background: #10141c;
+}
+
+.device-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    padding: 11px 12px;
+    border-bottom: 1px solid #262d39;
+    font-size: 13px;
+}
+
+.device-row:last-child {
+    border-bottom: 0;
+}
+
+.device-row span:first-child {
+    color: #c3cddd;
+    flex-shrink: 0;
+}
+
+.device-row span:last-child {
+    color: #aeb9cb;
+    text-align: right;
+    overflow-wrap: anywhere;
+}
+
+.device-controls {
+    margin-top: 10px;
+}
+
+.shutdown-box {
+    margin-top: 14px;
+    padding: 14px;
+    border: 1px solid #303746;
+    border-radius: 10px;
+    background: #10141c;
+}
+
+.shutdown-box p {
+    margin: 0 0 10px;
+    color: #aeb9cb;
+    font-size: 13px;
 }
 
 #vmPanel {
@@ -394,7 +461,7 @@ body.sidebar-collapsed #setupTitle::after {
                 ISOファイルを選択
             </label>
 
-            <input type="file" id="isoFile" accept=".iso">
+            <input type="file" id="isoFile" accept=".iso,application/x-iso9660-image">
 
             <div class="file-name" id="isoName">
                 ISO未選択
@@ -428,9 +495,7 @@ body.sidebar-collapsed #setupTitle::after {
         </div>
 
         <div class="field">
-            <label for="hddSize">
-                新規HDD容量
-            </label>
+            <label for="hddSize">新規HDD容量</label>
 
             <select id="hddSize">
                 <option value="64">64 MB</option>
@@ -447,7 +512,7 @@ body.sidebar-collapsed #setupTitle::after {
 
             <small>
                 新しいHDDはファイルとして作成します。
-                ディスク容量全体をJavaScriptのArrayBufferに確保しない構成です。
+                ディスク全体を巨大なArrayBufferに読み込む方式ではありません。
             </small>
         </div>
 
@@ -471,7 +536,7 @@ body.sidebar-collapsed #setupTitle::after {
 
             <small>
                 設定したメモリを確保できるとは限りません。
-                ブラウザー、OS、WebAssemblyの制約により、
+                ブラウザーやWebAssemblyの制約により、
                 大容量設定では起動に失敗する可能性があります。
             </small>
         </div>
@@ -486,7 +551,120 @@ body.sidebar-collapsed #setupTitle::after {
             </select>
 
             <small>
-                現在のv86では、複数の仮想CPUコアを利用する設定はできません。
+                現在のv86では複数の仮想CPUコアを利用する設定はできません。
+            </small>
+        </div>
+
+        <h2>BIOS設定</h2>
+
+        <div class="field">
+            <label for="bootOrder">起動順序</label>
+
+            <select id="bootOrder">
+                <option value="0">自動（v86標準）</option>
+                <option value="786">CD/DVD → HDD</option>
+                <option value="531">HDD → CD/DVD</option>
+            </select>
+
+            <small>
+                CD/DVDから起動する場合は、起動可能なISOが必要です。
+                起動順序の指定がOSやv86の動作に影響する場合があります。
+            </small>
+        </div>
+
+        <div class="field">
+            <label>
+                <input type="checkbox" id="bootMenu">
+                SeaBIOSの起動メニューを有効にする
+            </label>
+        </div>
+
+        <h2>接続デバイス</h2>
+
+        <div class="device-list" id="deviceList" aria-live="polite">
+            <div class="device-row">
+                <span>CPU</span>
+                <span>1コア・x86</span>
+            </div>
+
+            <div class="device-row">
+                <span>メモリ</span>
+                <span id="deviceMemory">未設定</span>
+            </div>
+
+            <div class="device-row">
+                <span>BIOS</span>
+                <span>SeaBIOS</span>
+            </div>
+
+            <div class="device-row">
+                <span>画面</span>
+                <span>VGA</span>
+            </div>
+
+            <div class="device-row">
+                <span>キーボード</span>
+                <span>仮想キーボード</span>
+            </div>
+
+            <div class="device-row">
+                <span>マウス</span>
+                <span>仮想マウス</span>
+            </div>
+
+            <div class="device-row">
+                <span>仮想HDD</span>
+                <span id="deviceHdd">未接続</span>
+            </div>
+
+            <div class="device-row">
+                <span>CD/DVD</span>
+                <span id="deviceCdrom">未接続</span>
+            </div>
+
+            <div class="device-row">
+                <span>ネットワーク</span>
+                <span>未実装</span>
+            </div>
+        </div>
+
+        <div class="file-row device-controls">
+            <button id="ejectCdButton" disabled>
+                CD/DVDを取り出す
+            </button>
+
+            <button id="reloadCdButton" disabled>
+                別のISOを挿入
+            </button>
+        </div>
+
+        <small>
+            ここに表示するのはBootBox内の仮想デバイスです。
+            実機PCのUSB機器などを直接操作する機能ではありません。
+            ネットワーク仮想デバイスはまだ実装されていません。
+        </small>
+
+        <h2>電源・シャットダウン</h2>
+
+        <div class="shutdown-box">
+            <p>
+                OSのシャットダウンメニューを利用するのが最も安全です。
+                OSに終了キーを送信しても、OSによって動作は異なります。
+            </p>
+
+            <div class="file-row">
+                <button id="sendShutdownKeysButton" disabled>
+                    OSに終了キーを送信
+                </button>
+
+                <button class="danger" id="stopButton" disabled>
+                    停止してHDDを保存
+                </button>
+            </div>
+
+            <small>
+                「停止してHDDを保存」はOSの正常終了を待つ機能ではありません。
+                強制停止になるため、可能なら先にOS内からシャットダウンしてください。
             </small>
         </div>
 
@@ -500,8 +678,7 @@ body.sidebar-collapsed #setupTitle::after {
         <div class="info-box">
             <strong>HDDの保存について</strong><br>
             v86は変更されたディスクブロックをキャッシュします。
-            保存時には元のファイルの未変更部分を再利用し、
-            変更部分を反映したファイルを作成します。
+            保存時には変更内容を反映したファイルを作成します。
             ブラウザーが対応していれば、元のHDDファイルに保存できます。
         </div>
 
@@ -512,10 +689,6 @@ body.sidebar-collapsed #setupTitle::after {
 
             <button id="saveHddButton" disabled>
                 HDDを保存
-            </button>
-
-            <button id="stopButton" disabled>
-                停止
             </button>
         </div>
 
@@ -574,12 +747,24 @@ const hddName = document.getElementById("hddName");
 const hddSizeInput = document.getElementById("hddSize");
 const memorySizeInput = document.getElementById("memorySize");
 
+const bootOrderInput = document.getElementById("bootOrder");
+const bootMenuInput = document.getElementById("bootMenu");
+
+const deviceMemory = document.getElementById("deviceMemory");
+const deviceHdd = document.getElementById("deviceHdd");
+const deviceCdrom = document.getElementById("deviceCdrom");
+
+const ejectCdButton = document.getElementById("ejectCdButton");
+const reloadCdButton = document.getElementById("reloadCdButton");
+
 const openHddButton = document.getElementById("openHddButton");
 const createHddButton = document.getElementById("createHddButton");
 
 const startButton = document.getElementById("startButton");
 const saveHddButton = document.getElementById("saveHddButton");
 const stopButton = document.getElementById("stopButton");
+const sendShutdownKeysButton =
+    document.getElementById("sendShutdownKeysButton");
 
 const statusElement = document.getElementById("status");
 const screenElement = document.getElementById("screen");
@@ -603,6 +788,7 @@ let activeHDDFile = null;
 let activeDiskAdapter = null;
 
 let saveInProgress = false;
+let cdromEjected = false;
 
 /* 共通処理 */
 
@@ -634,6 +820,66 @@ function formatBytes(bytes) {
     return bytes + " B";
 }
 
+function updateDeviceList() {
+    deviceMemory.textContent =
+        memorySizeInput.options[memorySizeInput.selectedIndex]?.text
+        || "未設定";
+
+    deviceHdd.textContent = selectedHDDFile
+        ? "接続済み · " + selectedHDDFile.name +
+          "（" + formatBytes(selectedHDDFile.size) + "）"
+        : "未接続";
+
+    deviceCdrom.textContent = !selectedISO
+        ? "未接続"
+        : cdromEjected
+            ? "取り出し済み"
+            : "接続済み · " + selectedISO.name;
+}
+
+function saveBootSettings() {
+    try {
+        localStorage.setItem(
+            "bootbox.bootOrder",
+            bootOrderInput.value
+        );
+
+        localStorage.setItem(
+            "bootbox.bootMenu",
+            bootMenuInput.checked ? "1" : "0"
+        );
+    } catch (error) {
+        console.warn(
+            "[BootBox] BIOS設定を保存できませんでした",
+            error
+        );
+    }
+}
+
+function loadBootSettings() {
+    try {
+        const order = localStorage.getItem("bootbox.bootOrder");
+
+        if (
+            order !== null &&
+            [...bootOrderInput.options].some(
+                option => option.value === order
+            )
+        ) {
+            bootOrderInput.value = order;
+        }
+
+        bootMenuInput.checked =
+            localStorage.getItem("bootbox.bootMenu") === "1";
+
+    } catch (error) {
+        console.warn(
+            "[BootBox] BIOS設定を読み込めませんでした",
+            error
+        );
+    }
+}
+
 function updateButtons() {
     const busy = starting || stopping || !!emulator;
 
@@ -652,6 +898,11 @@ function updateButtons() {
         saveInProgress ||
         !activeDiskAdapter;
 
+    sendShutdownKeysButton.disabled =
+        !emulator ||
+        starting ||
+        stopping;
+
     openHddButton.disabled = busy;
     createHddButton.disabled = busy;
 
@@ -659,6 +910,21 @@ function updateButtons() {
     hddInput.disabled = busy;
     hddSizeInput.disabled = busy;
     memorySizeInput.disabled = busy;
+
+    bootOrderInput.disabled = busy;
+    bootMenuInput.disabled = busy;
+
+    ejectCdButton.disabled =
+        !emulator ||
+        stopping ||
+        !selectedISO ||
+        cdromEjected;
+
+    reloadCdButton.disabled =
+        !emulator ||
+        stopping;
+
+    updateDeviceList();
 }
 
 function showPlaceholder(message) {
@@ -682,10 +948,18 @@ function refreshHddName() {
         "（" + formatBytes(selectedHDDFile.size) + "）";
 }
 
+/* BIOS設定 */
+
+bootOrderInput.addEventListener("change", saveBootSettings);
+bootMenuInput.addEventListener("change", saveBootSettings);
+
+memorySizeInput.addEventListener("change", updateDeviceList);
+
 /* ISO */
 
 isoInput.addEventListener("change", () => {
     selectedISO = isoInput.files?.[0] || null;
+    cdromEjected = false;
 
     isoName.textContent = selectedISO
         ? selectedISO.name + "（" + formatBytes(selectedISO.size) + "）"
@@ -733,6 +1007,7 @@ async function chooseExistingHDD() {
 
             selectedHDDHandle = handle;
             selectedHDDFile = file;
+
         } else {
             selectedHDDHandle = null;
             hddInput.click();
@@ -743,8 +1018,7 @@ async function chooseExistingHDD() {
 
         setStatus(
             "HDDファイルを選択しました。\n" +
-            "容量：" + formatBytes(selectedHDDFile.size) + "\n" +
-            "必要なディスク範囲を読み込む方式で起動します。"
+            "容量：" + formatBytes(selectedHDDFile.size)
         );
 
     } catch (error) {
@@ -774,7 +1048,7 @@ hddInput.addEventListener("change", () => {
     setStatus(
         selectedHDDFile
             ? "HDDファイルを選択しました。\n" +
-              "このブラウザーでは、変更後のHDDを別ファイルとして保存する必要があります。"
+              "変更後のHDDは、ダウンロード形式で保存します。"
             : "HDD未選択"
     );
 
@@ -806,13 +1080,11 @@ async function createNewHDD() {
 
     const bytes = mb * 1024 * 1024;
 
-    const proceed = confirm(
+    if (!confirm(
         "新しいRAW HDDファイルを作成します。\n\n" +
         "容量：" + formatBytes(bytes) + "\n\n" +
         "保存先を選択してください。"
-    );
-
-    if (!proceed) {
+    )) {
         return;
     }
 
@@ -832,10 +1104,6 @@ async function createNewHDD() {
             "容量：" + formatBytes(bytes)
         );
 
-        /*
-         * FileSystemWritableFileStream.truncate() でファイルの長さを設定。
-         * 巨大なゼロ埋めArrayBufferは作成しない。
-         */
         const writable = await handle.createWritable();
 
         await writable.truncate(bytes);
@@ -848,8 +1116,7 @@ async function createNewHDD() {
 
         setStatus(
             "新しいHDDファイルを作成しました。\n" +
-            "容量：" + formatBytes(selectedHDDFile.size) + "\n" +
-            "このファイルを仮想HDDとして使用できます。"
+            "容量：" + formatBytes(selectedHDDFile.size)
         );
 
     } catch (error) {
@@ -870,23 +1137,16 @@ async function createNewHDD() {
 
 createHddButton.addEventListener("click", createNewHDD);
 
-/* v86ディスクアダプターの取得 */
+/* v86ディスクアダプター */
 
 function getActiveDiskAdapter(instance) {
-    /*
-     * 現在のlibv86.js内部構造から、
-     * IDEプライマリマスターのディスクアダプターを取得する。
-     *
-     * これはv86の内部実装に依存するため、
-     * ライブラリを更新した場合は再確認が必要。
-     */
     const disk =
         instance?.v86?.devices?.ide?.primary?.master?.buffer;
 
     if (!disk) {
         throw new Error(
             "v86のHDDアダプターを取得できません。\n" +
-            "lib/libv86.jsのバージョンと内部構造を確認してください。"
+            "lib/libv86.jsの内部構造を確認してください。"
         );
     }
 
@@ -906,11 +1166,6 @@ async function saveCurrentHDD() {
         throw new Error("保存対象のHDDがありません。");
     }
 
-    /*
-     * get_as_file() は、元のFileのスライスと、
-     * 変更されたディスクブロックを組み合わせたFileを返す。
-     * ここでHDD全体をArrayBufferへ変換しない。
-     */
     const updatedFile = activeDiskAdapter.get_as_file(
         activeHDDFile.name || "bootbox-disk.img"
     );
@@ -929,11 +1184,6 @@ async function saveCurrentHDD() {
     }
 
     if (activeHDDHandle) {
-        /*
-         * File System Access APIで選択したファイルへ書き戻す。
-         * Blob/Fileをそのままストリームに渡し、
-         * JavaScriptのArrayBufferには変換しない。
-         */
         let permission = "granted";
 
         if (activeHDDHandle.queryPermission) {
@@ -942,8 +1192,10 @@ async function saveCurrentHDD() {
             });
         }
 
-        if (permission !== "granted" &&
-            activeHDDHandle.requestPermission) {
+        if (
+            permission !== "granted" &&
+            activeHDDHandle.requestPermission
+        ) {
             permission = await activeHDDHandle.requestPermission({
                 mode: "readwrite"
             });
@@ -965,8 +1217,8 @@ async function saveCurrentHDD() {
             });
 
             await writable.truncate(updatedFile.size);
-
             await writable.close();
+
         } catch (error) {
             try {
                 await writable.abort();
@@ -976,6 +1228,9 @@ async function saveCurrentHDD() {
         }
 
         activeHDDFile = await activeHDDHandle.getFile();
+        selectedHDDFile = activeHDDFile;
+
+        refreshHddName();
 
         setStatus(
             "HDDを元のファイルに保存しました。\n" +
@@ -986,11 +1241,6 @@ async function saveCurrentHDD() {
         return;
     }
 
-    /*
-     * 通常の<input type=file>で開いたファイルは
-     * 元のファイルへ直接書き戻せない。
-     * その場合は変更後のRAWイメージをダウンロードする。
-     */
     const url = URL.createObjectURL(updatedFile);
     const link = document.createElement("a");
 
@@ -1005,7 +1255,7 @@ async function saveCurrentHDD() {
 
     setStatus(
         "変更後のHDDファイルをダウンロードしました。\n" +
-        "元のファイルを残す場合は、ダウンロードしたファイルを別名で保存してください。"
+        "元のファイルを残す場合は、別名で保存してください。"
     );
 }
 
@@ -1032,13 +1282,14 @@ saveHddButton.addEventListener("click", async () => {
             "HDDを保存できませんでした。\n" +
             (error?.message || String(error))
         );
+
     } finally {
         saveInProgress = false;
         updateButtons();
     }
 });
 
-/* 起動 */
+/* 仮想PCの起動 */
 
 startButton.addEventListener("click", async () => {
     if (
@@ -1080,11 +1331,6 @@ startButton.addEventListener("click", async () => {
             "メモリ：" + memoryMB + " MB"
         );
 
-        /*
-         * ISOはCD-ROM用に読み込む。
-         * HDDはFileのまま渡す。
-         * HDDに対してarrayBuffer()を呼び出さない。
-         */
         const isoBuffer = await selectedISO.arrayBuffer();
 
         if (!isoBuffer.byteLength) {
@@ -1117,16 +1363,13 @@ startButton.addEventListener("click", async () => {
                 buffer: isoBuffer
             },
 
-            /*
-             * 重要：
-             * HDDのFileを直接渡す。
-             * async:trueでディスク全体の読み込みを避け、
-             * v86のFileベースのブロックキャッシュを利用する。
-             */
             hda: {
                 buffer: selectedHDDFile,
                 async: true
             },
+
+            boot_order: Number(bootOrderInput.value) || undefined,
+            bootmenu: bootMenuInput.checked,
 
             acpi: false,
             autostart: true
@@ -1135,6 +1378,11 @@ startButton.addEventListener("click", async () => {
         localEmulator = new V86(options);
         emulator = localEmulator;
 
+        activeHDDHandle = selectedHDDHandle;
+        activeHDDFile = selectedHDDFile;
+        activeDiskAdapter = null;
+        cdromEjected = false;
+
         localEmulator.add_listener("emulator-ready", () => {
             if (emulator !== localEmulator) {
                 return;
@@ -1142,21 +1390,25 @@ startButton.addEventListener("click", async () => {
 
             try {
                 activeDiskAdapter = getActiveDiskAdapter(localEmulator);
+
             } catch (error) {
-                console.error("[BootBox] HDDアダプター取得エラー", error);
+                console.error(
+                    "[BootBox] HDDアダプター取得エラー",
+                    error
+                );
+
+                starting = false;
+                updateButtons();
 
                 setStatus(
                     "仮想PCは準備されましたが、HDD保存機能を初期化できません。\n" +
                     (error?.message || String(error))
                 );
 
-                starting = false;
-                updateButtons();
                 return;
             }
 
             starting = false;
-
             updateButtons();
 
             setStatus(
@@ -1164,8 +1416,7 @@ startButton.addEventListener("click", async () => {
                 "OSの起動を待っています。\n\n" +
                 "メモリ：" + memoryMB + " MB\n" +
                 "CPU：1コア\n" +
-                "HDD：" + formatBytes(selectedHDDFile.size) + "\n" +
-                "HDD方式：Fileベースのブロックキャッシュ"
+                "HDD：" + formatBytes(activeHDDFile.size)
             );
         });
 
@@ -1185,7 +1436,10 @@ startButton.addEventListener("click", async () => {
                 return;
             }
 
-            setStatus("仮想PCが停止しました。");
+            setStatus(
+                "仮想PCが停止しました。\n" +
+                "必要に応じてHDDを保存してください。"
+            );
         });
 
     } catch (error) {
@@ -1217,10 +1471,67 @@ startButton.addEventListener("click", async () => {
     updateButtons();
 });
 
-/* 停止 */
+/* OSに終了キーを送信 */
+
+sendShutdownKeysButton.addEventListener("click", async () => {
+    if (!emulator || starting || stopping) {
+        return;
+    }
+
+    const instance = emulator;
+
+    if (!confirm(
+        "仮想PCに Ctrl + Alt + Delete を送信します。\n\n" +
+        "OSによってはシャットダウンではなく、ログイン画面やセキュリティ画面が表示されます。\n" +
+        "続行しますか？"
+    )) {
+        return;
+    }
+
+    try {
+        /*
+         * PS/2キーボードへCtrl+Alt+Deleteを送信する。
+         * OSの正常終了を直接保証するAPIではない。
+         */
+        await instance.keyboard_send_scancodes([
+            0x1D,       // Ctrl down
+            0x38,       // Alt down
+            0xE0, 0x53, // Delete down
+            0xE0, 0xD3, // Delete up
+            0xB8,       // Alt up
+            0x9D        // Ctrl up
+        ], 20);
+
+        setStatus(
+            "Ctrl + Alt + Delete を送信しました。\n" +
+            "OS側の画面を確認してください。\n\n" +
+            "正常にシャットダウンできた場合は、仮想PCが停止するまで待ってください。"
+        );
+
+    } catch (error) {
+        console.error("[BootBox] 終了キー送信エラー", error);
+
+        setStatus(
+            "終了キーを送信できませんでした。\n" +
+            (error?.message || String(error))
+        );
+    }
+});
+
+/* 停止してHDDを保存 */
 
 stopButton.addEventListener("click", async () => {
-    if (!emulator || stopping) {
+    if (!emulator || stopping || saveInProgress) {
+        return;
+    }
+
+    if (!confirm(
+        "仮想PCを停止してHDDを保存します。\n\n" +
+        "OSの正常終了を待つ処理ではありません。\n" +
+        "OSが動作中の場合、ファイルシステムが破損する可能性があります。\n\n" +
+        "可能なら先にOS内からシャットダウンしてください。\n\n" +
+        "続行しますか？"
+    )) {
         return;
     }
 
@@ -1231,9 +1542,8 @@ stopButton.addEventListener("click", async () => {
 
     try {
         /*
-         * 先に仮想PCを停止する。
-         * 停止後にディスクを保存することで、
-         * 実行中のディスク変更との競合を避ける。
+         * 強制停止。
+         * v86のstop()はゲストOSの正常終了を意味しない。
          */
         try {
             instance.stop();
@@ -1252,8 +1562,12 @@ stopButton.addEventListener("click", async () => {
 
             try {
                 await saveCurrentHDD();
+
             } catch (error) {
-                console.error("[BootBox] 停止時の保存エラー", error);
+                console.error(
+                    "[BootBox] 停止時の保存エラー",
+                    error
+                );
 
                 setStatus(
                     "仮想PCは停止しましたが、HDDを保存できませんでした。\n" +
@@ -1261,6 +1575,7 @@ stopButton.addEventListener("click", async () => {
                     "\n「HDDを保存」を再度試してください。"
                 );
             }
+
         } else {
             setStatus(
                 "仮想PCを停止しました。\n" +
@@ -1273,7 +1588,7 @@ stopButton.addEventListener("click", async () => {
 
         /*
          * 選択中のHDDファイルとハンドルは保持する。
-         * 次回の起動時に同じHDDを再利用できる。
+         * 次回起動時に再利用できる。
          */
         stopping = false;
 
@@ -1281,6 +1596,92 @@ stopButton.addEventListener("click", async () => {
 
         updateButtons();
     }
+});
+
+/* CD/DVD取り出し */
+
+ejectCdButton.addEventListener("click", () => {
+    if (!emulator || !selectedISO || cdromEjected || stopping) {
+        return;
+    }
+
+    try {
+        emulator.eject_cdrom();
+        cdromEjected = true;
+
+        setStatus(
+            "CD/DVDを取り出しました。\n" +
+            "仮想PCは起動したままです。"
+        );
+
+    } catch (error) {
+        setStatus(
+            "CD/DVDを取り出せませんでした。\n" +
+            (error?.message || String(error))
+        );
+    }
+
+    updateButtons();
+});
+
+/* 実行中に別のISOを挿入 */
+
+reloadCdButton.addEventListener("click", () => {
+    if (!emulator || stopping) {
+        return;
+    }
+
+    const picker = document.createElement("input");
+
+    picker.type = "file";
+    picker.accept = ".iso,application/x-iso9660-image";
+
+    picker.addEventListener("change", async () => {
+        const file = picker.files?.[0];
+
+        if (!file || !emulator || stopping) {
+            return;
+        }
+
+        const instance = emulator;
+
+        try {
+            setStatus("ISOを読み込んでいます……");
+
+            const buffer = await file.arrayBuffer();
+
+            if (emulator !== instance || stopping) {
+                return;
+            }
+
+            await instance.set_cdrom({
+                buffer
+            });
+
+            selectedISO = file;
+            cdromEjected = false;
+
+            isoName.textContent =
+                file.name + "（" + formatBytes(file.size) + "）";
+
+            setStatus(
+                "新しいISOをCD/DVDに挿入しました。\n" +
+                "OS側で再スキャンが必要な場合があります。"
+            );
+
+        } catch (error) {
+            console.error("[BootBox] ISO挿入エラー", error);
+
+            setStatus(
+                "ISOを挿入できませんでした。\n" +
+                (error?.message || String(error))
+            );
+        }
+
+        updateButtons();
+    });
+
+    picker.click();
 });
 
 /* 全画面表示 */
@@ -1292,6 +1693,7 @@ fullscreenButton.addEventListener("click", async () => {
         } else {
             await document.exitFullscreen();
         }
+
     } catch (error) {
         setStatus(
             "全画面表示を開始できませんでした。\n" +
@@ -1329,8 +1731,18 @@ document.addEventListener("keydown", (event) => {
     }
 });
 
+/* ページ離脱時の警告 */
+
+window.addEventListener("beforeunload", (event) => {
+    if (emulator || starting || stopping || saveInProgress) {
+        event.preventDefault();
+        event.returnValue = "";
+    }
+});
+
 /* 初期化 */
 
+loadBootSettings();
 updateButtons();
 
 </script>
