@@ -584,7 +584,30 @@ body.sidebar-collapsed #setupTitle::after {
                 SeaBIOSの起動メニューを有効にする
             </label>
         </div>
+<h2>ネットワーク</h2>
 
+<div class="field">
+    <label>
+        <input type="checkbox" id="networkEnabled" checked>
+        仮想ネットワークカードを有効にする
+    </label>
+</div>
+
+<div class="field">
+    <label for="networkRelayUrl">ネットワーク中継サーバー</label>
+    <input
+        type="url"
+        id="networkRelayUrl"
+        value="wss://relay.widgetry.org/"
+        style="width:100%;min-height:44px;padding:10px;
+        border:1px solid #465166;border-radius:9px;
+        background:#10141c;color:#fff;font:inherit"
+    >
+    <small>
+        公開中継サーバーを利用すると、通信が第三者のサーバーを経由します。
+        機密情報の入力には注意してください。
+    </small>
+</div>
         <h2>接続デバイス</h2>
 
         <div class="device-list" id="deviceList" aria-live="polite">
@@ -743,7 +766,11 @@ body.sidebar-collapsed #setupTitle::after {
 "use strict";
 
 /* DOM */
+const networkEnabledInput =
+    document.getElementById("networkEnabled");
 
+const networkRelayUrlInput =
+    document.getElementById("networkRelayUrl");
 const isoInput = document.getElementById("isoFile");
 const hddInput = document.getElementById("hddFile");
 
@@ -1368,7 +1395,12 @@ startButton.addEventListener("click", async () => {
             cdrom: {
                 buffer: isoBuffer
             },
-
+net_device: networkEnabledInput.checked
+    ? {
+        type: "ne2k",
+        relay_url: networkRelayUrlInput.value.trim()
+    }
+    : undefined,
             hda: {
                 buffer: selectedHDDFile,
                 async: true
